@@ -1,10 +1,20 @@
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.io import wavfile
 
-Fs, x = wavfile.read("piano.wav")
+"""
+N = 120
+n = np.arange(N)
+fo1 =12/120
+fo2 = 6/120
+x1=np.cos(2*np.pi*fo1*n) + np.cos(2*np.pi*fo2*n)
+X1 = np.fft.fft(x1)
+plt.stem(n, abs(X1))
+plt.show()
+"""
 
+
+#quiz 4.10
 
 def dft_shift(X):
     N = len(X)
@@ -15,19 +25,18 @@ def dft_shift(X):
         # odd-length: return N values
         return np.arange(-(N-1)/2, (N-1)/2 + 1), np.concatenate((X[(int((N+1)/2)):], X[:(int((N+1)/2))]))
 
-def dft_map(X, Fs, shift=True):
-    resolution = float(Fs) / len(X)
-    if shift:
-        n, Y = dft_shift(X)
-    else:
-        Y = X
-        n = np.arange(0, len(Y))
-    f = n * resolution
-    return f, Y
 
 
-# let's cut the signal otherwise it's too big
-x = x[:32768]
+
+N = 1024
+n = np.arange(N)
+f1 = N/8
+x = np.cos(2*np.pi/N *f1 *n)
+plt.stem(n, x)
+plt.show()
 X = np.fft.fft(x)
-f, y = dft_map(X, Fs)
-plt.plot(f, abs(y))
+xos, y = dft_shift(X)
+plt.stem(xos, abs(y))
+plt.show()
+
+
